@@ -1,14 +1,20 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { CreateExpenseDto } from './dto/createExpense.dto'
 import { Expense } from './interfaces/expense.dto'
+import { Model } from 'mongoose';
+
 @Injectable()
 export class ExpenseService {
-    private readonly expenses: Expense[] = [];
 
-    create(expense: Expense) {
-        this.expenses.push(expense);
+    constructor(@InjectModel('Expense') private readonly expenseModel: Model<Expense>) { }
+
+    async create(expense: CreateExpenseDto): Promise<Expense> {
+        const createdExpense = new this.expenseModel(expense);
+        return await createdExpense.save();
     }
 
-    findAll(): Expense[] {
-        return this.expenses;
+    async findAll(): Promise<Expense[]> {
+        return await this.expenseModel.find().exec();
     }
 }
