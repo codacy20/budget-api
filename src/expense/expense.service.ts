@@ -19,9 +19,9 @@ export class ExpenseService {
     }
 
     async remove(name: string): Promise<Expense> {
-        const obj: Expense = await this.expenseModel.find({ name }).exec();
+        const obj: Expense = await this.expenseModel.findOne({ name }).exec();
         if (obj) {
-            await this.expenseModel.remove({ name });
+            await this.expenseModel.findOneAndRemove({ name });
             return obj;
         }
     }
