@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateExpenseDto } from './dto/createExpense.dto'
-import { Expense } from './interfaces/expense.dto'
+import { CreateExpenseDto } from './dto/createExpense.dto';
+import { Expense } from './interfaces/expense.dto';
 import { Model } from 'mongoose';
 
 @Injectable()
@@ -19,9 +19,9 @@ export class ExpenseService {
     }
 
     async remove(name: string): Promise<Expense> {
-        let obj = await this.expenseModel.find({ name: name }).exec();
+        const obj: Expense = await this.expenseModel.find({ name }).exec();
         if (obj) {
-            await this.expenseModel.remove({ name: name });
+            await this.expenseModel.remove({ name });
             return obj;
         }
     }
