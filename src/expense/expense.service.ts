@@ -11,17 +11,18 @@ export class ExpenseService {
 
     async create(expense: CreateExpenseDto): Promise<Expense> {
         const createdExpense = new this.expenseModel(expense);
-        return await createdExpense.save();
+        await createdExpense.save();
+        return createdExpense;
     }
 
     async findAll(): Promise<Expense[]> {
         return await this.expenseModel.find().exec();
     }
 
-    async remove(name: string): Promise<Expense> {
-        const obj: Expense = await this.expenseModel.findOne({ name }).exec();
+    async remove(id: string): Promise<Expense> {
+        const obj: Expense = await this.expenseModel.findById({ _id: id }).exec();
         if (obj) {
-            await this.expenseModel.findOneAndRemove({ name });
+            await this.expenseModel.findByIdAndRemove({ _id: id });
             return obj;
         }
     }

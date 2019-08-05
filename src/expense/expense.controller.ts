@@ -15,11 +15,11 @@ export class ExpenseController {
 
     @Post()
     async create(@Body() createExpenseDto: CreateExpenseDto) {
-        this.expenseService.create(createExpenseDto);
+        return this.expenseService.create(createExpenseDto);
     }
 
-    @Delete(':name')
-    remove(@Param('name') name: string) {
-        return this.expenseService.remove(name);
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.expenseService.remove(id);
     }
 }
