@@ -8,6 +8,11 @@ export class ExpenseController {
 
     constructor(private readonly expenseService: ExpenseService) { }
 
+    @Get(':date')
+    async findByDate(@Param('date') date: string): Promise<Expense[]> {
+        return this.expenseService.findByDate(date);
+    }
+
     @Get()
     async findAll(): Promise<Expense[]> {
         return this.expenseService.findAll();
