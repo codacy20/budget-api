@@ -20,7 +20,6 @@ export class ExpenseController {
 
     @Post()
     async create(@Body() createExpenseDto: CreateExpenseDto) {
-        console.log(createExpenseDto);
         return this.expenseService.create(createExpenseDto);
     }
 
