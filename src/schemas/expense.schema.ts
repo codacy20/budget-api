@@ -4,5 +4,6 @@ export const ExpenseSchema = new mongoose.Schema({
     name: String,
     price: Number,
     location: String,
-    date: Date
+    date: Date,
+    category: String,
 });
