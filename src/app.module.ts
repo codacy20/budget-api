@@ -4,11 +4,11 @@ import { AppService } from './app.service';
 import { ExpenseModule } from './expense/expense.module';
 import { MongooseModule } from '@nestjs/mongoose';
 
-
 @Module({
   imports: [ExpenseModule, MongooseModule.forRootAsync({
     useFactory: () => ({
       uri: 'mongodb://amir:test123@ds157707.mlab.com:57707/budget-api',
+      useNewUrlParser: true,
     }),
   })],
   controllers: [AppController],
