@@ -1,8 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ExpenseModule } from './expense/expense.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { LoggerMiddleware } from './logger.middleware';
+import { ExpenseController } from './expense/expense.controller';
 
 @Module({
   imports: [ExpenseModule, MongooseModule.forRootAsync({
@@ -14,4 +16,10 @@ import { MongooseModule } from '@nestjs/mongoose';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes(ExpenseController);
+  }
+}
