@@ -9,14 +9,18 @@ import { TimesheetService } from './timesheet/timesheet.service';
 import { TimesheetModule } from './timesheet/timesheet.module';
 
 @Module({
-  imports: [ExpenseModule, MongooseModule.forRootAsync({
-    useFactory: () => ({
-      uri: 'mongodb://amir:test123@ds157707.mlab.com:57707/budget-api',
-      useNewUrlParser: true,
+  imports: [
+    ExpenseModule,
+    TimesheetModule,
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: 'mongodb://amir:test123@ds157707.mlab.com:57707/budget-api',
+        useNewUrlParser: true,
+      }),
     }),
-  }), TimesheetModule],
-  controllers: [AppController, TimesheetController],
-  providers: [AppService, TimesheetService],
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
