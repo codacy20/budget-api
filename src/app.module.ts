@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer } from '@nestjs/common';
+import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ExpenseModule } from './expense/expense.module';
@@ -19,7 +19,6 @@ import { ExpenseController } from './expense/expense.controller';
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(LoggerMiddleware)
-      .forRoutes(ExpenseController);
+      .apply(LoggerMiddleware).forRoutes(({ path: '/', method: RequestMethod.ALL }));
   }
 }
