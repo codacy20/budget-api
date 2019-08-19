@@ -7,6 +7,7 @@ import { LoggerMiddleware } from './logger.middleware';
 import { TimesheetController } from './timesheet/timesheet.controller';
 import { TimesheetService } from './timesheet/timesheet.service';
 import { TimesheetModule } from './timesheet/timesheet.module';
+import { ExpenseService } from './expense/expense.service';
 
 @Module({
   imports: [
@@ -20,11 +21,12 @@ import { TimesheetModule } from './timesheet/timesheet.module';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: ExpenseService, useValue: {} }], // THIS COULD GIVE YOU ISSUES
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(LoggerMiddleware).forRoutes(({ path: '/', method: RequestMethod.ALL }));
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: '/', method: RequestMethod.ALL });
   }
 }

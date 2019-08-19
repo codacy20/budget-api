@@ -32,7 +32,7 @@ export class ExpenseService {
         return createdExpense;
     }
 
-    async findAll(): Promise<Expense[]> {
+    public async findAll(): Promise<Expense[]> {
         return await this.expenseModel.find().exec();
     }
 
