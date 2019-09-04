@@ -5,25 +5,25 @@ import { CreateTimesheetDto } from './dto/createTimesheet.dto';
 
 @Controller('timesheet')
 export class TimesheetController {
-    constructor(private readonly expenseService: TimesheetService) { }
+  constructor(private readonly timesheetService: TimesheetService) {}
 
-    // @Get(':date')
-    // async findByDate(@Param('date') date: string): Promise<Timesheet[]> {
-    //     return this.expenseService.findByDate(date);
-    // }
+  // @Get(':date')
+  // async findByDate(@Param('date') date: string): Promise<Timesheet[]> {
+  //     return this.expenseService.findByDate(date);
+  // }
 
-    @Get()
-    async findAll(): Promise<Timesheet[]> {
-        return this.expenseService.findAll();
-    }
+  @Get()
+  async findAll(): Promise<Timesheet[]> {
+    return this.timesheetService.findAll();
+  }
 
-    @Post()
-    async create(@Body() createExpenseDto: CreateTimesheetDto) {
-        return this.expenseService.create(createExpenseDto);
-    }
+  @Post()
+  async create(@Body() createExpenseDto: CreateTimesheetDto) {
+    return this.timesheetService.create(createExpenseDto);
+  }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.expenseService.remove(id);
-    }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.timesheetService.remove(id);
+  }
 }
