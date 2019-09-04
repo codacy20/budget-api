@@ -8,16 +8,7 @@ import { TimesheetModule } from './timesheet/timesheet.module';
 import { ExpenseService } from './expense/expense.service';
 
 @Module({
-  imports: [
-    ExpenseModule,
-    TimesheetModule,
-    MongooseModule.forRootAsync({
-      useFactory: () => ({
-        uri: 'mongodb://amir:test123@ds157707.mlab.com:57707/budget-api',
-        useNewUrlParser: true,
-      }),
-    }),
-  ],
+  imports: [ExpenseModule, TimesheetModule],
   controllers: [AppController],
   providers: [AppService, { provide: ExpenseService, useValue: {} }], // THIS COULD GIVE YOU ISSUES
 })
