@@ -11,7 +11,7 @@ import { ConfigModule } from '../config-module/config.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (config: ConfigService) => ({
-        uri: config.get('DATABASE_URL'),
+        uri: config.get('DATABASE_EXPENSES'),
         useNewUrlParser: true,
       }),
       inject: [ConfigService],
