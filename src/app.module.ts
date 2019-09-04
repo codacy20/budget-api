@@ -2,13 +2,13 @@ import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ExpenseModule } from './expense/expense.module';
-import { MongooseModule } from '@nestjs/mongoose';
 import { LoggerMiddleware } from './logger.middleware';
 import { TimesheetModule } from './timesheet/timesheet.module';
 import { ExpenseService } from './expense/expense.service';
+import { ConfigModule } from './config-module/config.module';
 
 @Module({
-  imports: [ExpenseModule, TimesheetModule],
+  imports: [ExpenseModule, TimesheetModule, ConfigModule],
   controllers: [AppController],
   providers: [AppService, { provide: ExpenseService, useValue: {} }], // THIS COULD GIVE YOU ISSUES
 })
