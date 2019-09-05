@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 @Injectable()
 export class TimesheetService {
   constructor(
-    @InjectModel('Timesheet') private readonly timesheetModel: Model<Timesheet>,
+    @InjectModel('timesheet') private readonly timesheetModel: Model<Timesheet>,
   ) {}
 
   async create(timesheet: CreateTimesheetDto): Promise<Timesheet> {
