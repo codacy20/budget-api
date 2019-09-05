@@ -6,4 +6,5 @@ export interface Expense extends Document {
   location: string;
   date: Date;
   category: string;
+  vat: boolean;
 }

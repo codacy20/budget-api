@@ -4,4 +4,5 @@ export class CreateExpenseDto {
   readonly location: string;
   readonly date: Date;
   readonly category: string;
+  readonly vat: boolean;
 }
