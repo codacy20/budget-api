@@ -6,5 +6,5 @@ export const ExpenseSchema = new mongoose.Schema({
   location: String,
   date: Date,
   category: String,
-  vat: Boolean,
+  vat: Number,
 });
