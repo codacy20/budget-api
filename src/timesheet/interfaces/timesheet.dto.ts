@@ -5,3 +5,10 @@ export interface Timesheet extends Document {
   date: Date;
   category: string;
 }
+
+export interface Period extends Document {
+  timeslots: [Timesheet];
+  finished: boolean;
+  start: Date;
+  end: Date;
+}

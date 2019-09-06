@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { TimesheetController } from './timesheet.controller';
 import { TimesheetService } from './timesheet.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TimesheetSchema } from '../schemas/timesheet.schema';
 import { ConfigModule } from '../config-module/config.module';
 import { ConfigService } from '../config-module/config.service';
+import { PeriodSchema } from '../schemas/period.schema';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { ConfigService } from '../config-module/config.service';
       }),
       inject: [ConfigService],
     }),
-    MongooseModule.forFeature([{ name: 'timesheet', schema: TimesheetSchema }]),
+    MongooseModule.forFeature([{ name: 'timesheet', schema: PeriodSchema }]),
   ],
   providers: [TimesheetService],
   controllers: [TimesheetController],

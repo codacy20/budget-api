@@ -1,7 +1,8 @@
 import { Controller, Delete, Param, Post, Get, Body } from '@nestjs/common';
 import { TimesheetService } from './timesheet.service';
-import { Timesheet } from './interfaces/timesheet.dto';
+import { Timesheet, Period } from './interfaces/timesheet.dto';
 import { CreateTimesheetDto } from './dto/createTimesheet.dto';
+import { PeriodDto } from './dto/createPeriod.dto';
 
 @Controller('timesheet')
 export class TimesheetController {
@@ -13,13 +14,13 @@ export class TimesheetController {
   // }
 
   @Get()
-  async findAll(): Promise<Timesheet[]> {
+  async findAll(): Promise<Period[]> {
     return this.timesheetService.findAll();
   }
 
   @Post()
-  async create(@Body() createExpenseDto: CreateTimesheetDto) {
-    return this.timesheetService.create(createExpenseDto);
+  async create(@Body() createPeriodDto: PeriodDto) {
+    return this.timesheetService.create(createPeriodDto);
   }
 
   @Delete(':id')
