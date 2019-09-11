@@ -13,19 +13,35 @@ export class TimesheetService {
 
   async addToTimeslot(timesheet: CreateTimesheetDto): Promise<void> {
     const dateObj = new Date(timesheet.date);
-    const obj = await this.timePeriodModel
+    const check = await this.check(
+      dateObj.getMonth() + 1,
+      dateObj.getFullYear(),
+    );
+    if (!check) {
+      throw new BadRequestException({
+        statusCode: 400,
+        error: 'Bad Request',
+        message: 'we can not find the timeslot',
+      });
+    }
+    const obj: Period = await this.timePeriodModel
       .findOne({ month: dateObj.getMonth() + 1 })
       .exec();
-    if (obj && obj.year === dateObj.getFullYear()) {
-      return await this.timePeriodModel.update(
-        { _id: obj._id },
-        { $push: { timeslots: timesheet } },
-      );
-    }
+    return await this.timePeriodModel.update(
+      { _id: obj._id },
+      { $push: { timeslots: timesheet } },
+    );
   }
 
   async create(timesheet: PeriodDto): Promise<Period> {
-    await this.check(timesheet.month, timesheet.year);
+    const check = await this.check(timesheet.month, timesheet.year);
+    if (check) {
+      throw new BadRequestException({
+        statusCode: 400,
+        error: 'Bad Request',
+        message: 'A similar timeslot was found',
+      });
+    }
     const createdTimesheet = new this.timePeriodModel(timesheet);
     await createdTimesheet.save();
     return createdTimesheet;
@@ -47,12 +63,9 @@ export class TimesheetService {
     const obj: Period = await this.timePeriodModel.findOne({ month }).exec();
     if (obj) {
       if (obj.year === Math.abs(year)) {
-        throw new BadRequestException({
-          statusCode: 400,
-          error: 'Bad Request',
-          message: 'A similar timeslot was found',
-        });
+        return true;
       }
     }
+    return false;
   }
 }
