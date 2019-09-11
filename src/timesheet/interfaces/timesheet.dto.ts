@@ -9,6 +9,6 @@ export interface Timesheet extends Document {
 export interface Period extends Document {
   timeslots: [Timesheet];
   finished: boolean;
-  start: Date;
-  end: Date;
+  month: number;
+  year: number;
 }

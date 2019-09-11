@@ -18,6 +18,11 @@ export class TimesheetController {
     return this.timesheetService.findAll();
   }
 
+  @Post('update')
+  async addToTimeslot(@Body() createPeriodDto: CreateTimesheetDto) {
+    return this.timesheetService.addToTimeslot(createPeriodDto);
+  }
+
   @Post()
   async create(@Body() createPeriodDto: PeriodDto) {
     return this.timesheetService.create(createPeriodDto);
