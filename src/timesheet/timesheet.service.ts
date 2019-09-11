@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { Period } from './interfaces/timesheet.dto';
+import { Period, Timesheet } from './interfaces/timesheet.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { PeriodDto } from '../timesheet/dto/createPeriod.dto';
 import { Model } from 'mongoose';
@@ -11,31 +11,31 @@ export class TimesheetService {
     @InjectModel('timesheet') private readonly timePeriodModel: Model<Period>,
   ) {}
 
-  async addToTimeslot(timesheet: CreateTimesheetDto): Promise<void> {
+  async addToTimeslot(timesheet: CreateTimesheetDto): Promise<Period> {
     const dateObj = new Date(timesheet.date);
     const check = await this.check(
       dateObj.getMonth() + 1,
       dateObj.getFullYear(),
     );
-    if (!check) {
+    if (check === 0) {
       throw new BadRequestException({
         statusCode: 400,
         error: 'Bad Request',
         message: 'we can not find the timeslot',
       });
     }
-    const obj: Period = await this.timePeriodModel
-      .findOne({ month: dateObj.getMonth() + 1 })
-      .exec();
-    return await this.timePeriodModel.update(
-      { _id: obj._id },
+    return await this.timePeriodModel.findOneAndUpdate(
+      { _id: check },
       { $push: { timeslots: timesheet } },
+      (err, doc) => {
+        return doc;
+      },
     );
   }
 
   async create(timesheet: PeriodDto): Promise<Period> {
     const check = await this.check(timesheet.month, timesheet.year);
-    if (check) {
+    if (check !== 0) {
       throw new BadRequestException({
         statusCode: 400,
         error: 'Bad Request',
@@ -63,9 +63,9 @@ export class TimesheetService {
     const obj: Period = await this.timePeriodModel.findOne({ month }).exec();
     if (obj) {
       if (obj.year === Math.abs(year)) {
-        return true;
+        return obj.id;
       }
     }
-    return false;
+    return 0;
   }
 }
