@@ -24,13 +24,12 @@ export class TimesheetService {
         message: 'we can not find the timeslot',
       });
     }
-    return await this.timePeriodModel.findOneAndUpdate(
+    const updatedUser = await this.timePeriodModel.findOneAndUpdate(
       { _id: check },
       { $push: { timeslots: timesheet } },
-      (err, doc) => {
-        return doc;
-      },
+      { upsert: true, new: true },
     );
+    return updatedUser;
   }
 
   async create(timesheet: PeriodDto): Promise<Period> {
