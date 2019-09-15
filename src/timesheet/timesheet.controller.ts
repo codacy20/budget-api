@@ -8,10 +8,10 @@ import { PeriodDto } from './dto/createPeriod.dto';
 export class TimesheetController {
   constructor(private readonly timesheetService: TimesheetService) {}
 
-  // @Get(':date')
-  // async findByDate(@Param('date') date: string): Promise<Timesheet[]> {
-  //     return this.expenseService.findByDate(date);
-  // }
+  @Get(':date')
+  async findByDate(@Param('date') date: string): Promise<Period> {
+    return this.timesheetService.findByDate(date);
+  }
 
   @Get()
   async findAll(): Promise<Period[]> {

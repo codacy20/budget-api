@@ -67,4 +67,23 @@ export class TimesheetService {
     }
     return 0;
   }
+
+  async findByDate(date: string): Promise<Period> {
+    const dateObj = new Date(date);
+    const check = await this.check(
+      dateObj.getMonth() + 1,
+      dateObj.getFullYear(),
+    );
+    if (check === 0) {
+      throw new BadRequestException({
+        statusCode: 400,
+        error: 'Bad Request',
+        message: 'we can not find the timeslot',
+      });
+    }
+    const obj: Period = await this.timePeriodModel
+      .findOne({ month: dateObj.getMonth() + 1, year: dateObj.getFullYear() })
+      .exec();
+    return obj;
+  }
 }
