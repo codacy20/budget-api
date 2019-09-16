@@ -1,4 +1,14 @@
-import { Controller, Delete, Param, Post, Get, Body } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Param,
+  Post,
+  Get,
+  Body,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { TimesheetService } from './timesheet.service';
 import { Timesheet, Period } from './interfaces/timesheet.dto';
 import { CreateTimesheetDto } from './dto/createTimesheet.dto';
@@ -31,5 +41,11 @@ export class TimesheetController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.timesheetService.remove(id);
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file) {
+    console.log(file);
   }
 }
