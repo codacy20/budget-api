@@ -8,6 +8,8 @@ import {
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
+import { diskStorage } from 'multer';
+import { editFileName } from './utilities';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TimesheetService } from './timesheet.service';
 import { Timesheet, Period } from './interfaces/timesheet.dto';
@@ -44,7 +46,14 @@ export class TimesheetController {
   }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './upload',
+        filename: editFileName,
+      }),
+    }),
+  )
   uploadFile(@UploadedFile() file) {
     console.log(file);
   }

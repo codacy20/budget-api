@@ -20,7 +20,7 @@ import { MulterModule } from '@nestjs/platform-express';
     MongooseModule.forFeature([{ name: 'timesheet', schema: PeriodSchema }]),
     MulterModule.registerAsync({
       useFactory: () => ({
-        dest: '/upload',
+        dest: './upload',
       }),
     }),
   ],
