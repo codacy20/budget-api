@@ -44,7 +44,8 @@ export class ExpenseController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploadReceipt',
+        destination: `./uploadReceipt/${new Date().getFullYear()}-${new Date().getMonth() +
+          1}`,
         filename: editFileName,
       }),
     }),
