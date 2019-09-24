@@ -49,7 +49,7 @@ export class TimesheetController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './upload',
+        destination: './uploadClientBilling',
         filename: editFileName,
       }),
     }),

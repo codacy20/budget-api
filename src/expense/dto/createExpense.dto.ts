@@ -5,4 +5,5 @@ export class CreateExpenseDto {
   readonly date: Date;
   readonly category: string;
   readonly vat: number;
+  readonly receipt?: string;
 }

@@ -7,4 +7,5 @@ export interface Expense extends Document {
   date: Date;
   category: string;
   vat: number;
+  receipt?: string;
 }
