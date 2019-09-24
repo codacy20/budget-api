@@ -40,6 +40,14 @@ export class TimesheetController {
     return this.timesheetService.create(createPeriodDto);
   }
 
+  @Delete('timeslot/:id/:timeslotId')
+  removeTimeslot(
+    @Param('id') id: string,
+    @Param('timeslotId') timeslotId: string,
+  ) {
+    return this.timesheetService.removeTimeslot(id, timeslotId);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.timesheetService.remove(id);
