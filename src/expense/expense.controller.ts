@@ -50,20 +50,17 @@ export class ExpenseController {
       }),
     }),
   )
-  uploadFile(@UploadedFile() file, @Param('id') id: string) {
-    const upadte = this.expenseService.uploadFile(id, file.destination);
+  async uploadFile(@UploadedFile() file, @Param('id') id: string) {
+    const upadte: Expense = await this.expenseService.uploadFile(
+      id,
+      file.filename,
+    );
     let response;
-    if (typeof upadte === 'object') {
+    if (upadte._id) {
       response = {
         upload: true,
         destination: file.destination,
         filename: file.filename,
-      };
-    } else {
-      response = {
-        upaload: false,
-        destination: null,
-        filename: null,
       };
     }
     return response;

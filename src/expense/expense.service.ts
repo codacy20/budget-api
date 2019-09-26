@@ -45,16 +45,13 @@ export class ExpenseService {
   }
 
   async uploadFile(id: string, path: string): Promise<Expense> {
-    console.log(id, path);
     const obj: Expense = await this.expenseModel.findById({ _id: id }).exec();
-    console.log(obj);
     if (obj) {
       const updatedUser = await this.expenseModel.findOneAndUpdate(
         { _id: id },
         { receipt: path },
         { upsert: true, new: true },
       );
-      console.log(updatedUser);
       return updatedUser;
     }
     return null;
