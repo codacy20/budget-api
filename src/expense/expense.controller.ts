@@ -40,7 +40,7 @@ export class ExpenseController {
     return this.expenseService.remove(id);
   }
 
-  @Post('upload')
+  @Post('upload/:id')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -50,7 +50,22 @@ export class ExpenseController {
       }),
     }),
   )
-  uploadFile(@UploadedFile() file) {
-    console.log(file);
+  uploadFile(@UploadedFile() file, @Param('id') id: string) {
+    const upadte = this.expenseService.uploadFile(id, file.destination);
+    let response;
+    if (typeof upadte === 'object') {
+      response = {
+        upload: true,
+        destination: file.destination,
+        filename: file.filename,
+      };
+    } else {
+      response = {
+        upaload: false,
+        destination: null,
+        filename: null,
+      };
+    }
+    return response;
   }
 }
