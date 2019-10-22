@@ -59,7 +59,7 @@ export class TimesheetService {
       if (timeslotIdFound.length === obj.timeslots.length) {
         this.badRequest();
       }
-      const updatedUser = await this.timePeriodModel.findOneAndUpdate(
+      const updatedUser = this.timePeriodModel.findOneAndUpdate(
         { _id: id },
         { timeslots: timeslotIdFound },
         { upsert: true, new: true },
@@ -97,6 +97,28 @@ export class TimesheetService {
       .findOne({ month: dateObj.getMonth() + 1, year: dateObj.getFullYear() })
       .exec();
     return obj;
+  }
+
+  async stopStartPeriod(monthYear: {
+    month: number;
+    year: number;
+  }): Promise<Period> {
+    const check = await this.check(monthYear.month, monthYear.year);
+    if (check === 0) {
+      throw new BadRequestException({
+        statusCode: 400,
+        error: 'Bad Request',
+        message: 'we can not find the timeslot',
+      });
+    }
+    const updatedPeriod = this.timePeriodModel.findOne(
+      { _id: check },
+      (err, period) => {
+        period.finished = !period.finished;
+        return period.save();
+      },
+    );
+    return updatedPeriod; // TODO RETURN IS OUTDATED
   }
 
   badRequest() {

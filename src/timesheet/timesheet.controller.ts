@@ -35,6 +35,11 @@ export class TimesheetController {
     return this.timesheetService.addToTimeslot(createPeriodDto);
   }
 
+  @Post('stopStart')
+  async stopStartPeriod(@Body() monthYear: { month: number; year: number }) {
+    return this.timesheetService.stopStartPeriod(monthYear);
+  }
+
   @Post()
   async create(@Body() createPeriodDto: PeriodDto) {
     return this.timesheetService.create(createPeriodDto);
