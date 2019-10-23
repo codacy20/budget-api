@@ -13,14 +13,14 @@ export class TimesheetService {
 
   async addToTimeslot(timesheet: CreateTimesheetDto): Promise<Period> {
     const dateObj = new Date(timesheet.date);
-    const check = await this.check(
+    const check = await this.checkReturnID(
       dateObj.getMonth() + 1,
       dateObj.getFullYear(),
     );
     if (check === 0) {
       this.badRequest();
     }
-    const updatedUser = await this.timePeriodModel.findOneAndUpdate(
+    const updatedUser = this.timePeriodModel.findOneAndUpdate(
       { _id: check },
       { $push: { timeslots: timesheet } },
       { upsert: true, new: true },
@@ -29,7 +29,7 @@ export class TimesheetService {
   }
 
   async create(timesheet: PeriodDto): Promise<Period> {
-    const check = await this.check(timesheet.month, timesheet.year);
+    const check = await this.checkReturnID(timesheet.month, timesheet.year);
     if (check !== 0) {
       this.badRequest();
     }
@@ -45,7 +45,7 @@ export class TimesheetService {
   async remove(id: string): Promise<Period> {
     const obj: Period = await this.timePeriodModel.findById({ _id: id }).exec();
     if (obj) {
-      await this.timePeriodModel.findByIdAndRemove({ _id: id });
+      this.timePeriodModel.findByIdAndRemove({ _id: id });
       return obj;
     }
   }
@@ -70,7 +70,7 @@ export class TimesheetService {
     }
   }
 
-  async check(month: number, year: number) {
+  async checkReturnID(month: number, year: number) {
     const obj: Period = await this.timePeriodModel.findOne({ month }).exec();
     if (obj) {
       if (obj.year === Math.abs(year)) {
@@ -80,9 +80,19 @@ export class TimesheetService {
     return 0;
   }
 
+  async checkReturnObj(month: number, year: number, returnObj?: boolean) {
+    const obj: Period = await this.timePeriodModel.findOne({ month }).exec();
+    if (obj) {
+      if (obj.year === Math.abs(year) && returnObj) {
+        return { id: obj.id, value: obj };
+      }
+    }
+    return { id: 0 };
+  }
+
   async findByDate(date: string): Promise<Period> {
     const dateObj = new Date(date);
-    const check = await this.check(
+    const check = await this.checkReturnID(
       dateObj.getMonth() + 1,
       dateObj.getFullYear(),
     );
@@ -103,20 +113,22 @@ export class TimesheetService {
     month: number;
     year: number;
   }): Promise<Period> {
-    const check = await this.check(monthYear.month, monthYear.year);
-    if (check === 0) {
+    const check: { id: number; value?: Period } = await this.checkReturnObj(
+      monthYear.month,
+      monthYear.year,
+      true,
+    );
+    if (check.id === 0) {
       throw new BadRequestException({
         statusCode: 400,
         error: 'Bad Request',
         message: 'we can not find the timeslot',
       });
     }
-    const updatedPeriod = this.timePeriodModel.findOne(
-      { _id: check },
-      (err, period) => {
-        period.finished = !period.finished;
-        return period.save();
-      },
+    const updatedPeriod = this.timePeriodModel.findOneAndUpdate(
+      { _id: check.id },
+      { $set: { finished: !check.value.finished } },
+      { new: true },
     );
     return updatedPeriod; // TODO RETURN IS OUTDATED
   }
