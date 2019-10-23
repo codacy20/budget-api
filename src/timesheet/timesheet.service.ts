@@ -80,14 +80,18 @@ export class TimesheetService {
     return 0;
   }
 
-  async checkReturnObj(month: number, year: number, returnObj?: boolean) {
+  async checkReturnObj(
+    month: number,
+    year: number,
+    returnObj?: boolean,
+  ): Promise<Period> {
     const obj: Period = await this.timePeriodModel.findOne({ month }).exec();
     if (obj) {
       if (obj.year === Math.abs(year) && returnObj) {
-        return { id: obj.id, value: obj };
+        return obj;
       }
     }
-    return { id: 0 };
+    return null;
   }
 
   async findByDate(date: string): Promise<Period> {
@@ -113,12 +117,12 @@ export class TimesheetService {
     month: number;
     year: number;
   }): Promise<Period> {
-    const check: { id: number; value?: Period } = await this.checkReturnObj(
+    const check: Period = await this.checkReturnObj(
       monthYear.month,
       monthYear.year,
       true,
     );
-    if (check.id === 0) {
+    if (check == null) {
       throw new BadRequestException({
         statusCode: 400,
         error: 'Bad Request',
@@ -126,8 +130,8 @@ export class TimesheetService {
       });
     }
     const updatedPeriod = this.timePeriodModel.findOneAndUpdate(
-      { _id: check.id },
-      { $set: { finished: !check.value.finished } },
+      { _id: check._id },
+      { $set: { finished: !check.finished } },
       { new: true },
     );
     return updatedPeriod; // TODO RETURN IS OUTDATED
