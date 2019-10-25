@@ -123,18 +123,30 @@ export class TimesheetService {
       true,
     );
     if (check == null) {
+      let newTimesheet: [Timesheet];
+      const newPeriodStarting: PeriodDto = {
+        finished: false,
+        year: monthYear.year,
+        month: monthYear.month,
+        timeslots: newTimesheet,
+      };
+      const createdTimesheet = new this.timePeriodModel(newPeriodStarting);
+      await createdTimesheet.save();
+      return createdTimesheet;
+    } else if (check) {
+      const updatedPeriod = this.timePeriodModel.findOneAndUpdate(
+        { _id: check._id },
+        { $set: { finished: !check.finished } },
+        { new: true },
+      );
+      return updatedPeriod;
+    } else {
       throw new BadRequestException({
         statusCode: 400,
         error: 'Bad Request',
-        message: 'we can not find the timeslot',
+        message: 'UnExpected Error!',
       });
     }
-    const updatedPeriod = this.timePeriodModel.findOneAndUpdate(
-      { _id: check._id },
-      { $set: { finished: !check.finished } },
-      { new: true },
-    );
-    return updatedPeriod; // TODO RETURN IS OUTDATED
   }
 
   badRequest() {
